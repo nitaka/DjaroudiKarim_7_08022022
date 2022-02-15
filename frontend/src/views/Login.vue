@@ -5,7 +5,7 @@
             <h2>Se connecter</h2>
             <label><span>Email</span><input type="email" /></label>
             <label><span>Mot de passe</span><input type="password" /></label>
-            <button type="button" class="submit">Connexion</button>
+            <button type="button" class="submit"><router-link to="/menu">Connexion</router-link></button>
         </div>
         <div class="sub-cont">
             <div class="img">
