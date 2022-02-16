@@ -38,15 +38,14 @@
 </template>
 
 <script>
-export default {
-  name: "Login", 
-  methods: {
-      sendMessage() {
-          document.querySelector('.cont').classList.toggle('s--signup'); 
-          }
-      },
-}
-
+  export default {
+    name: "Login", 
+    methods: {
+        sendMessage() {
+            document.querySelector('.cont').classList.toggle('s--signup'); 
+            }
+        },
+  }
 </script>
 
 
