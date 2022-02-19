@@ -4,16 +4,13 @@ const userCtrl = require("../controllers/user");
 const multer = require("../middleware/multer-profil");
 const auth = require("../middleware/authGetUser");
 const authTokenId = require("../middleware/auth");
-const validEmail = require("../middleware/email");
 
 router.post('/signup', userCtrl.signup)
-router.post('/login', userCtrl.login)
+router.post('/login', multer, userCtrl.login)
 router.delete("/delete/:id", userCtrl.delete);
-router.post("/signup", validEmail, multer, userCtrl.signup);
-router.post("/login", userCtrl.login);
-router.put("/modify/:id", authTokenId, multer, userCtrl.modifyPP);
+router.put("/modify/:id", authTokenId, multer, userCtrl.modifImg);
 router.put("/modifyAccount/:id", authTokenId, userCtrl.modifAccount);
-router.put("/modifyPassword/:id", authTokenId, userCtrl.modifyPassword);
+router.put("/modifPassword/:id", authTokenId, userCtrl.modifPassword);
 router.post("/", auth, userCtrl.getOne);
 router.post("/getAs", auth, userCtrl.getAs);
 

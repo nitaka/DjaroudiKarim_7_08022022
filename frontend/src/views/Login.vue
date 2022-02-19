@@ -1,12 +1,12 @@
 <template>
 <div class="container">
     <div class="cont">
-        <div class="form sign-in">
+        <form class="form sign-in" v-on:submit.prevent="login">
             <h2>Se connecter</h2>
-            <label><span>Email</span><input type="email" /></label>
-            <label><span>Mot de passe</span><input type="password" /></label>
-            <button type="button" class="submit"><router-link to="/menu">Connexion</router-link></button>
-        </div>
+            <label><span>Email</span><input v-model="login.email" type="email" id="LogEmail" name="email" placeholder="Ton email" required /></label>
+            <label><span>Mot de passe</span><input v-model="login.password" type="password" id="logPassword" name="password" placeholder="password" required /></label>
+            <button type="submit" class="submit" @click="sendLogin" >Connexion</button>
+        </form>
         <div class="sub-cont">
             <div class="img">
                 <div class="img__text m--up">
@@ -22,29 +22,132 @@
                     <span class="m--in">Login</span>
                 </div>
             </div>
-            <div class="form sign-up">
+            <form class="form sign-up" v-on:submit.prevent="signup">
                 <h2>Veuillez entrer les données ci-dessous</h2>
-                <label><span>Nom</span><input type="text" /></label>
-                <label><span>Prénom</span><input type="text" /></label>
-                <label><span>Email</span><input type="email" /></label>
-                <label><span>Mot de passe</span><input type="password" /></label>
-                <label for="imageUrl"><input type="file" id="imageUrl" name="imageUrl"></label>
-  
-                <button type="button" class="submit">Validation</button>
-            </div>
+                <label><span>Nom</span><input v-model="signup.nom" type="text" id="nom" name="nom" placeholder="Monkey D" required /></label>
+                <label><span>Prénom</span><input v-model="signup.prenom" type="text" id="prenom" name="prenom" placeholder="Luffy" required /></label>
+                <label><span>Email</span><input v-model="signup.email" type="email" id="email" name="email" placeholder="Mugiwara@onepiece.com" required/></label>
+                <label><span>Mot de passe</span><input v-model="signup.password" type="password" id="password" name="password" placeholder="password" required /></label>
+                <button type="submit" class="submit" @click="sendSignup">Validation</button>
+            </form>
         </div>
     </div>
 </div>
 </template>
 
 <script>
+  import axios from "axios";
+  import store from '@/store/index.js';
+  import router from '@/router/index.js';
+
+  const CryptoJS = require("crypto-js");
+
   export default {
-    name: "Login", 
-    methods: {
-        sendMessage() {
-            document.querySelector('.cont').classList.toggle('s--signup'); 
-            }
+    
+    name: "Login",
+    data() {
+      return {
+        signup: {
+          nom: "",
+          prenom: "",
+          email: "",
+          password: "",
         },
+        login: {
+          email: "",
+          password: "",
+        },
+      };
+    },
+    methods: {
+      sendMessage() {
+          document.querySelector('.cont').classList.toggle('s--signup'); 
+      },
+    
+       //Crée user
+      sendSignup() {
+        const regexEmail = new RegExp(/^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        const regexName = new RegExp(/^[a-zA-Z]+[a-zA-Z]+[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*){3,}$/);
+        const regexPassword = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#?$%^&*.]).{8,}$/);
+
+        this.signup.nom = document.querySelector("#nom").value;
+        this.signup.prenom = document.querySelector("#prenom").value;
+        this.signup.password = document.querySelector("#password").value;
+        this.signup.email = document.querySelector("#email").value;
+               
+        if ((this.signup.nom !== null || 
+              this.signup.prenom !== null || 
+              this.signup.email !== null || 
+              this.signup.password !== null) && 
+          (regexName.test(this.signup.nom) && 
+            regexName.test(this.signup.prenom) && 
+            regexEmail.test(this.signup.email) && 
+            regexPassword.test(this.signup.password))) {
+          axios.post("http://localhost:3000/api/user/signup", { nom: this.signup.nom, prenom: this.signup.prenom, email: this.signup.email, password: this.signup.password,
+          })
+            .then(response => {
+              console.log(response);
+              axios.post("http://localhost:3000/api/user/login", { email: this.login.email, password: this.login.password,
+              })
+              .then(function (response) {
+                const token = response.data.token;
+                const id = response.data.userId;
+                const userId = CryptoJS.AES.encrypt(id.toString(),store.state.CryptoKey).toString();
+                document.cookie = `user-token=${token}; SameSite=Lax; Secure; max-age=60*60;`;
+                document.cookie = `userId=${userId}; SameSite=Lax; Secure; max-age=60*60;`;
+                router.push("/home");
+                router.go();
+              })
+              .catch(error => console.log(error));
+            })
+            .catch(error => console.log(error));
+        } else if (regexName.test(this.signup.nom) === false ) {
+          alert("Erreur nom");
+        } else if (regexName.test(this.signup.prenom) === false) {
+          alert("Erreur prenom");
+        } else if (regexEmail.test(this.signup.email) === false) {
+          alert("Erreur Email");
+        } else if (regexPassword.test(this.signup.password) === false) {
+          alert("Erreur Mot de passe");
+        }
+      },
+       //Se connecter
+      sendLogin() {
+        const regexEmail = new RegExp(/^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        const regexPassword = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#?$%^&*.]).{8,}$/);
+
+        this.login.email = document.querySelector("#LogEmail").value;
+        this.login.password = document.querySelector("#logPassword").value;
+
+          if((this.login.email !== null || 
+              this.signup.password !== null) && 
+              (regexEmail.test(this.signup.email) && 
+              regexPassword.test(this.signup.password))) {
+            axios.post('http://localhost:3000/api/user/login', { email: this.login.email, password: this.login.password
+            })
+          .then(function (response) { 
+            const token = response.data.token;
+            const id = response.data.userId;
+            const userId = CryptoJS.AES.encrypt(id.toString(),store.state.CryptoKey).toString();
+            document.cookie = `user-token=${token}; SameSite=Lax; Secure; max-age=60*60;`;
+            document.cookie = `userId=${userId}; SameSite=Lax; Secure; max-age=60*60;`;
+            router.push("/home");
+            router.go();
+          })
+          .catch(error => console.log(error));
+        } 
+      },
+    },
+    mounted() { 
+      if (document.cookie) { 
+        const userIdCookie = document.cookie.split("; ").find((row) => row.startsWith("userId=")).split("=")[1];
+        console.log(userIdCookie);
+        
+        if (userIdCookie) {  // Si il y a un userId bascule sur le home
+          router.push("/home");
+        }
+      }
+    },
   }
 </script>
 
