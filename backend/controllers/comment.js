@@ -1,7 +1,7 @@
 const { pool } = require('../config/db');
 
 exports.create = (req, res, next) => {
-    // DEFINI LES CHAMPS REMPLI
+    // Defini les champs remplis
     const post = {
         comment: req.body.comment,
         authorId: req.body.authorId,
@@ -20,6 +20,7 @@ exports.create = (req, res, next) => {
 };
 
 exports.getAll = (req, res, next) => {
+    // recuperé toute les données 
     let sql = `SELECT * from comment c JOIN user u WHERE c.authorId = u.id ORDER BY idComment;`;
     pool.execute(sql, function (err, result) {
         if (err) res.status(400).json({ err });
@@ -28,6 +29,7 @@ exports.getAll = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
+    // Supprime les commantaires
     let sql3 = `SELECT * from comment WHERE idComment=?`;
     pool.execute(sql3, [req.params.commentId], function (err, result) {
         if (result[0].authorId == req.body.userId || req.body.admin == true) {

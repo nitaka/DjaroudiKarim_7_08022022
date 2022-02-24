@@ -6,6 +6,7 @@ const fs = require("fs");
 
 
 exports.delete = (req, res, next) => {
+    // supp user
     if (req.body.password) {
         let sql = `SELECT * FROM user WHERE id=?`;
         pool.execute(sql, [req.params.id], function (err, result) {
@@ -33,6 +34,7 @@ exports.delete = (req, res, next) => {
 }
 
 exports.signup = (req, res, next) => {
+    // crée compte
     let sql = `SELECT * FROM user WHERE email=?`;
     pool.execute(sql, [req.body.email], function (err, result) {
         let user = result[0];
@@ -62,6 +64,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
+    // Connexion au site
     let sql = `SELECT * FROM user WHERE email=?`;
     pool.execute(sql, [req.body.email], function (err, result) {
         let user = result[0];
@@ -86,6 +89,7 @@ exports.login = (req, res, next) => {
 };
 
 exports.getOne = (req, res, next) => {
+    // recupére les données par ID
     let sql = `SELECT * FROM user WHERE user.id=${req.body.userId};`;
     pool.execute(sql, function (err, result) {
         if (err) res.status(400).json({ err });
@@ -94,6 +98,7 @@ exports.getOne = (req, res, next) => {
 }
 
 exports.getAs = (req, res, next) => {
+    // Récupére toute les données
     let sql = `SELECT * FROM user WHERE nom LIKE '%${req.body.nom}%' OR prenom LIKE '%${req.body.nom}%' LIMIT 12;`;
     pool.execute(sql, [req.body.nom], function (err, result) {
         if (err) res.status(400).json({ err });
@@ -151,6 +156,7 @@ exports.modifAccount = (req, res, next) => {
 }
 
 exports.modifImg = (req, res, next) => {
+    // Changer image du profil
     if (req.file) {
         let sql = `SELECT * FROM user WHERE id = ?`;
         pool.execute(sql, [req.params.id], function (err, result) {

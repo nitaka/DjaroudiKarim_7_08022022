@@ -11,6 +11,7 @@ exports.getAll = (req, res, next) => {
 }
 
 exports.getByAuthor = (req, res, next) => {
+    // Recupére les données par auteur
     let sql = `SELECT * FROM post JOIN user WHERE user.id=authorId AND authorId=? ORDER BY date DESC;`;
     pool.execute(sql, [req.body.id], function (err, result) {
         if (err) res.status(400).json({ err });

@@ -1,7 +1,7 @@
 const { pool } = require('../config/db');
 
 exports.like = (req, res, next) => {
-    // TOUT LES POST DU DERNIER AU PREMIER
+    // Gére les like disslike
     let sql = "SELECT * FROM groupomania.like;";
     pool.execute(sql, function (err, results) {
         if (err) res.status(400).json({ err });
@@ -36,6 +36,7 @@ exports.like = (req, res, next) => {
 }
 
 exports.liked = (req, res, next) => {
+    // recupére les like
     let sql2 = `SELECT postId FROM groupomania.like WHERE userId = ?`;
     pool.execute(sql2,[req.body.userId], function (err, result) {
         if (err) res.status(400).json({ err });

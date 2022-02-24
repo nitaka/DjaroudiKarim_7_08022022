@@ -9,7 +9,6 @@ const path =  require("path");
 const helmet = require("helmet");
 
 app.use(express.json());
-app.use(helmet());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,6 +16,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 })
+
+// Autorisation Headers complémentaire (pour les images)
+app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
 
 app.use('/api/user',userRoutes);
 app.use('/api/post',postRoutes);

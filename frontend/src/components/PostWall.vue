@@ -3,6 +3,7 @@
         <div class="d-flex justify-content-center newPost">
             <div class=" home col-xs-12 col-md-10 col-lg-6 d-flex flex-row justify-content-center align-items-center p-2 bg-white border mt-5">
                 <div class="form">
+                  <!-- Form post -->
                     <form v-on:submit.prevent>
                         <div class=" form-group mb-3 col-12 d-flex justify-content-center align-items-center">
                             <img v-if="user" v-bind:src="user.imgProfil" alt="photo post" class="imgProf" />
@@ -19,6 +20,7 @@
             </div>
         </div>
         <div v-if="first">
+          <!-- Infos posts -->
             <div v-for="post in posts" :key="post.postId" class="d-flex justify-content-center">
                 <div class="bg-white border mt-2 mb-2 col-sm-12 col-md-10 col-lg-6 posts">
                     <div>
@@ -35,6 +37,7 @@
                                         Posté le {{ formatDate(post.date) }}
                                     </span>
                                 </div>
+                                <!-- Supprimer post -->
                                 <img class="deletePost" src="../assets/trash-can-solid.svg" alt="supprimer" v-if="post.authorId == userId || (user && user.admin)" @click="deletePost(post.postId, post.authorId)"/>
                             </div>
                         </div>
@@ -43,10 +46,12 @@
                         <span class="text">{{ post.text }}</span>
                     </div>
                     <div v-if="post.imageUrl" class="mb-2">
+                        <!-- Image du post -->
                         <img class="img-fluid img-responsive imagePost" v-bind:src="post.imageUrl"/>
                     </div>
                     <div class="react">
                         <div class="like" @click="liked">
+                          <!-- Ajout images vectorielles -->
                             <svg @click="like(post.postId)" v-if="likedPost.includes(post.postId)" aria-label="Je n’aime plus" class="_8-yf5 heart" color="#ed4956" fill="#ed4956" height="30" role="img" viewBox="0 0 48 48" width="24">
                                 <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
                             </svg>
@@ -58,6 +63,7 @@
                             </span>
                         </div>
                         <div class="comment">
+                          <!-- Ajout de commentaire -->
                             <svg @click="afficherComment" aria-label="Commenter" class="_8-yf5 svg-react" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 48 48" width="24">
                                 <path clip-rule="evenodd" d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1 2.8-11.1C47.5 11 37 .5 24 .5S.5 11 .5 24 11 47.5 24 47.5c4 0 7.8-1 11.1-2.8l11 2.8c.8.2 1.6-.6 1.4-1.4zm-3-22.1c0 4-1 7-2.6 10-.2.4-.3.9-.2 1.4l2.1 8.4-8.3-2.1c-.5-.1-1-.1-1.4.2-1.8 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z" fill-rule="evenodd"></path>
                             </svg>
@@ -65,6 +71,7 @@
                         </div>
                     </div>
                     <div class="block-com disp">
+                      <!-- Infos commentaires -->
                         <div class="comments" v-for="comment in comments" :key="comment.idComment">
                             <div class="imgProf" v-if="post.postId === comment.postId">
                                 <router-link :to="{ name: 'user', params: { userId: comment.authorId } }">
