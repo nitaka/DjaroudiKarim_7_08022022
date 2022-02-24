@@ -1,42 +1,40 @@
 <template>
   <header>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-          <div class="container">
-              <a class="navbar-brand" href="#">
-                  <router-link to="/home" ><img src="./assets/icon-left-font-monochrome-white.png" alt="Logo groupomania et lien acceuil" class="logoNav" ></router-link>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <router-link to="/home" ><img src="./assets/icon-left-font-monochrome-white.png" alt="Logo groupomania et lien acceuil" class="logoNav" ></router-link>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item" v-if="user">
+              <a class="nav-link">
+                <router-link :to="{ name: 'user', params: { userId: user.id } }">
+                  <img v-bind:src="user.imgProfil" alt="Image du profil" class="userImg" @click="refresh"/>
+                </router-link>
               </a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav ms-auto">
-                      <!-- <li class="nav-item" v-if="user">
-                          <a class="nav-link">
-                              <router-link :to="{ name: 'user', params: { userId: user.id } }">
-                                  <img v-bind:src="user.imgProfil" alt="image du profil" class="userPageLink" @click="refresh"/>
-                              </router-link>
-                          </a>
-                      </li> -->
-                      <li class="nav-item">
-                      </li>
-                      <li class="nav-item" v-if="user">
-                        <a class="nav-link">
-                          <router-link to="/">
-                            <img @click="deconnexion" src="./assets/arrow-right-from-bracket-solid.svg" alt="logout" class="logout" id="logout"/>
-                          </router-link>
-                        </a>
-                      </li>
-                      <!-- <li class="nav-item" v-if="user">
-                          <a class="nav-link">
-                              <router-link to="/settings">
-                                  <img src="./assets/gear-solid.svg" alt="setting" class="setting"/>
-                              </router-link>
-                          </a>
-                      </li> -->
-                  </ul>
-              </div>
-          </div>
-      </nav>
+            </li>
+            <li class="nav-item" v-if="user">
+              <a class="nav-link">
+                <router-link to="/setting">
+                  <img src="./assets/icon-setting.png" alt="setting" class="setting"/>
+                </router-link>
+              </a>
+            </li>
+            <li class="nav-item" v-if="user">
+              <a class="nav-link">
+                <router-link to="/">
+                  <img @click="deconnexion" src="./assets/icon-logout.png" alt="logout" class="logout" id="logout"/>
+                </router-link>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </header>
 <router-view :key="$route.fullPath"/>
 </template>
@@ -65,11 +63,14 @@ export default {
     sendMessage() {
       document.querySelector('.cont').classList.toggle('s--signup'); 
     },
+
     deconnexion() {
       document.cookie = "userId=";
       document.cookie = "user-token=";
-      router.push("/");
+      router.go();
+      
     },
+
     getCurrentUser() {
       
       axios.post("http://localhost:3000/api/user",{ userId: this.userId },
@@ -94,14 +95,24 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .logoNav {
     height: 1.5em;
 }
 
-#logout {
+.logout,.setting {
   height: 30px;
   color: #ffffff;
+}
+
+.userImg{
+  height: 50px;
+  width: 50px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 40px;
+  border-radius: 100%;
+  object-fit: cover;
 }
 
 #app {

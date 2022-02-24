@@ -2,7 +2,7 @@ const { pool } = require('../config/db');
 const fs = require("fs");
 
 exports.getAll = (req, res, next) => {
-    // TOUT LES POST DU DERNIER AU PREMIER
+    // Ordre des post sur le mur
     let sql = "SELECT * FROM post p JOIN user WHERE user.id=authorId ORDER BY date DESC LIMIT 50;";
     pool.execute(sql, function (err, result) {
         if (err) res.status(400).json({ err });
@@ -19,7 +19,7 @@ exports.getByAuthor = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-    // DEFINI LES CHAMPS REMPLI
+    // Definition des champs 
     const image = (req.file) ? `${req.protocol}://${req.get('host')}/images/post/${req.file.filename}` : "";
     const textSend = (req.body.text) ? req.body.text : " ";
     const post = {
@@ -29,7 +29,8 @@ exports.create = (req, res, next) => {
         date: new Date().toLocaleString("af-ZA", { timeZone: "Europe/Paris" }),
         authorId: req.body.userId,
     };
-    //ENVOIE LA REQUETE AVEC MULTER ET LES VALEURS PAR DEFAUT
+    
+    //Post add valeurs via multer
     let sql = `INSERT INTO post (text, imageUrl, date, authorId) VALUES (?,?,?,?);`;
     pool.execute(sql, [post.text, post.imageUrl, post.date, post.authorId], function (err, result) {
         if (err) throw err;
@@ -44,7 +45,7 @@ exports.delete = (req, res, next) => {
         if (!result[0]) res.status(400).json({ message: "Aucun id ne correspond dans la table" });
         else {
             if (result[0].authorId == req.body.userId || req.body.admin == true) {
-                // SI LE POST A UNE IMAGE, LA SUPPRIMER DU DOSSIER IMAGES
+                // supp l'image du post
                 if (result[0].imageUrl != "") {
                     const name = result[0].imageUrl.split('/images/post/')[1];
                     fs.unlink(`images/post/${name}`, () => {
@@ -52,7 +53,7 @@ exports.delete = (req, res, next) => {
                         else console.log('Image supprimée  !');
                     })
                 }
-                // SUPPRIME LE POST DANS LA DB
+                // supp post dans bdd
                 let sql2 = `DELETE FROM post WHERE postId = ?`;
                 pool.execute(sql2, [req.params.id], function (err, result) {
                     if (err) throw err;
@@ -73,7 +74,7 @@ exports.modify = (req, res, next) => {
             if (err) res.status(400).json({ e });
             if (!result[0]) res.status(400).json({ message: "Aucun id ne correspond dans la table" });
             else {
-                // SI LE POST A UNE IMAGE, LA SUPPRIMER DU DOSSIER IMAGES
+                // Remplace image du post par la nouvelle
                 if (result[0].imageUrl != "") {
                     const name = result[0].imageUrl.split('/images/post/')[1];
                     fs.unlink(`images/${name}`, () => {
@@ -81,7 +82,7 @@ exports.modify = (req, res, next) => {
                         else console.log('Image modifiée !');
                     })
                 }
-                // RECUPERE LES INFOS ENVOYER PAR LE FRONT 
+                // Recu les infos de la page
                 let image = (req.file) ? `${req.protocol}://${req.get('host')}/images/post/${req.file.filename}` : "";
                 let textSend = (req.body.post) ? req.body.post.text : " ";
                 const post = {
@@ -89,7 +90,7 @@ exports.modify = (req, res, next) => {
                     imageUrl: image,
                     date: new Date().toLocaleString("af-ZA", { timeZone: "Europe/Paris" })
                 };
-                // UPDATE LA DB
+                // Maj bdd
                 let sql2 = `UPDATE post
                 SET text = ?, imageUrl= ?, date = ?
                 WHERE id = ?`;
@@ -100,16 +101,14 @@ exports.modify = (req, res, next) => {
             }
         });
     } else {
-        // RECUPERE LES INFOS ENVOYER PAR LE FRONT 
+        // Recup les infos de la page
         const textSend = (req.body.post) ? req.body.post.text : " ";
         const post = {
             text: textSend,
             date: new Date().toLocaleString("af-ZA", { timeZone: "Europe/Paris" })
         };
-        // UPDATE LA DB
-        let sql2 = `UPDATE post
-                SET text = ?, date =?
-                WHERE id = ?`;
+        // Maj bdd
+        let sql2 = `UPDATE post SET text = ?, date =? WHERE id = ?`;
         pool.execute(sql2, [post.text, post.date, req.params.id], function (err, result) {
             if (err) throw err;
             res.status(201).json({ message: `Post update` });
