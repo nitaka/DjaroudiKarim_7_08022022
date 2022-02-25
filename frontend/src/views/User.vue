@@ -14,9 +14,7 @@
         </div>
         <div class="text-user">
           <p class="userName">{{ currentUser.prenom }} {{ currentUser.nom }}</p>
-          <p v-if="currentUser.desc" class="metier">
-            <strong>Métier :</strong> {{ currentUser.desc }}
-          </p>
+          <p v-if="currentUser.desc" class="metier"><strong>Métier :</strong> {{ currentUser.desc }}</p>
         </div>
       </div>
       <div v-if="first">
@@ -41,9 +39,9 @@
               </div>
             </div>
             <div v-if="post.text != ' '">
-                <span class="text">
-                  {{ post.text }}
-                </span>
+              <span class="text">
+                {{ post.text }}
+              </span>
             </div>
             <div v-if="post.imageUrl" class="mb-2">
               <img class="img-fluid img-responsive imagePost" v-bind:src="post.imageUrl"/>
@@ -76,16 +74,15 @@
                 </div>
                 <div v-if="post.postId === comment.postId" class="commentaire">
                     <span class="commentAuthor">
-                      {{ comment.prenom }} {{ comment.nom }}
+                    {{ comment.prenom }} {{ comment.nom }}
                     </span>
                   <p class="commentText">{{ comment.comment }}</p>
                   <img class="delete" src="../assets/trash-can-solid.svg" alt="supprimer" v-if="comment.id == userId || (user && user.admin)" @click="
-                      deleteComment(
-                        comment.idComment,
-                        comment.authorId,
-                        post.postId
-                      )
-                    "
+                    deleteComment(
+                      comment.idComment,
+                      comment.authorId,
+                      post.postId
+                    )"
                   />
                 </div>
               </div>
@@ -124,22 +121,20 @@ export default {
       postsRecive: null,
       token: document.cookie
         ? document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1]
-        : null,
+      : null,
       comments: null,
       newComment: null,
       userId: document.cookie
-        ? CryptoJS.AES.decrypt(
-            document.cookie.split("; ").find((row) => row.startsWith("userId=")).split("=")[1],
-            store.state.CryptoKey
+        ? CryptoJS.AES.decrypt(document.cookie.split("; ").find((row) => row.startsWith("userId=")).split("=")[1],store.state.CryptoKey
         ).toString(CryptoJS.enc.Utf8)
-        : null,
+      : null,
     };
   },
   methods: {
     formatDate(input) {
       console.log(input);
       let datePart = input.match(/\d+/g),
-        year = datePart[0].substring(2), // obtenir seulement deux chiffres
+        year = datePart[0].substring(2), // obtenir seulement deux chiffres de l"année en cours
         month = datePart[1],
         day = datePart[2];
       return day + "/" + month + "/" + year;
@@ -153,16 +148,16 @@ export default {
         fd.append("image", this.image, "image");
       }
       axios.put(`http://localhost:3000/api/user/modifImg/${this.userId}`, fd, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-        .then(function (res) {
-          console.log(res);
-          router.go();
-        })
-        .catch(error => console.log(error));
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${this.token}`,
+        },
+      })
+      .then(function (res) {
+        console.log(res);
+        router.go();
+      })
+      .catch(error => console.log(error));
     },
     afficherComment(event) {
       let path;
@@ -193,174 +188,172 @@ export default {
       }
       if (this.text || this.image) {
         axios.post("http://localhost:3000/api/post", fd, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${this.token}`,
-            },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${this.token}`,
+          },
         })
         .then(function (res) {
-            console.log(res);
-            document.querySelector("#text").value = null;
-            this.getPost();
+          console.log(res);
+          document.querySelector("#text").value = null;
+          this.getPost();
         })
         .catch(error => console.log(error));
       }
     },
     liked() {
       axios.post("http://localhost:3000/api/like/liked", {
-          userId: this.userId,
-        })
-        .then(function (res) {
-          const ObjlikedPosts = res.data;
-          this.likedPost = [];
-          for (const ObjlikedPost of ObjlikedPosts) {
-            this.likedPost.push(ObjlikedPost.postId);
-          }
-        })
-        .catch(error => console.log(error));
+        userId: this.userId,
+      })
+      .then(function (res) {
+        const ObjlikedPosts = res.data;
+        this.likedPost = [];
+        for (const ObjlikedPost of ObjlikedPosts) {
+          this.likedPost.push(ObjlikedPost.postId);
+        }
+      })
+      .catch(error => console.log(error));
     },
     deletePost(postId, authorId) {
-        if (this.userId == authorId || (this.user && this.user.admin)) {
-            axios.delete(`http://localhost:3000/api/post/${postId}`, {
-                headers: { Authorization: `Bearer ${this.token}` },
-                data: { userId: this.userId, admin: this.user.admin },
-            })
-            .then((res) => {
-                console.log(res);
-                this.getPost();
-            })
-            .catch(error => console.log(error));
-        }
-    },
-    like(currentPostId) {
-        axios.post("http://localhost:3000/api/like", {
-          userId: this.userId,
-          postId: currentPostId,
+      if (this.userId == authorId || (this.user && this.user.admin)) {
+        axios.delete(`http://localhost:3000/api/post/${postId}`, {
+          headers: { Authorization: `Bearer ${this.token}` },
+          data: { userId: this.userId, admin: this.user.admin },
         })
-        .then(function (res) {
-            console.log(res);
-            this.liked();
-            this.getPost();
+        .then((res) => {
+          console.log(res);
+          this.getPost();
         })
         .catch(error => console.log(error));
+      }
+    },
+    like(currentPostId) {
+      axios.post("http://localhost:3000/api/like", {
+        userId: this.userId,
+        postId: currentPostId,
+      })
+      .then(function (res) {
+        console.log(res);
+        this.liked();
+        this.getPost();
+      })
+      .catch(error => console.log(error));
     },
     deleteComment(id, authorId, currentPostId) {
-        if (this.userId == authorId || (this.user && this.user.admin)) {
-            axios.delete(`http://localhost:3000/api/comment/${id}/${currentPostId}`, {
-                headers: { Authorization: `Bearer ${this.token}` },
-                data: { userId: this.userId, admin: this.user.admin },
-            })
-            .then((res) => {
-                console.log(res);
-                this.getPost();
-            })
-            .catch(error => console.log(error));
-        }
+      if (this.userId == authorId || (this.user && this.user.admin)) {
+        axios.delete(`http://localhost:3000/api/comment/${id}/${currentPostId}`, {
+          headers: { Authorization: `Bearer ${this.token}` },
+          data: { userId: this.userId, admin: this.user.admin },
+        })
+        .then((res) => {
+          console.log(res);
+          this.getPost();
+        })
+        .catch(error => console.log(error));
+      }
     },
     upload(event) {
       this.newComment = event.target.value;
     },
     comment(event, id) {
-        if (this.newComment) {
-            axios.post("http://localhost:3000/api/comment",{
-                comment: this.newComment,
-                authorId: this.userId,
-                postId: id,
-            },
-            {
-                headers: { Authorization: `Bearer ${this.token}` },
-            })
-            .then(function (res) {
-                console.log(res);
-                let pathClass, pathInput;
-                if (event.path[2].children[3].matches(".react")) {
-                    pathClass = event.path[2].children[4];
-                    pathInput = event.path[2].children[5].children[0];
-                } else {
-                    pathClass = event.path[2].children[3];
-                    pathInput = event.path[2].children[4].children[0];
-                }
-                pathClass.classList.remove("disp");
-                pathInput.value = null;
-                this.getPost();
-            })
-            .catch(error => console.log(error));
-        }
+      if (this.newComment) {
+        axios.post("http://localhost:3000/api/comment",{
+            comment: this.newComment,
+            authorId: this.userId,
+            postId: id,
+        },
+        {
+          headers: { Authorization: `Bearer ${this.token}` },
+        })
+        .then(function (res) {
+          console.log(res);
+          let pathClass, pathInput;
+          if (event.path[2].children[3].matches(".react")) {
+            pathClass = event.path[2].children[4];
+            pathInput = event.path[2].children[5].children[0];
+          } else {
+            pathClass = event.path[2].children[3];
+            pathInput = event.path[2].children[4].children[0];
+          }
+          pathClass.classList.remove("disp");
+          pathInput.value = null;
+          this.getPost();
+        })
+        .catch(error => console.log(error));
+      }
     },
     async getUser() {
-        axios.post("http://localhost:3000/api/user",{
-            userId: this.userIdPage 
+      axios.post("http://localhost:3000/api/user",{
+        userId: this.userIdPage 
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
         },
-        {
-            headers: {
-                Authorization: `Bearer ${this.token}`,
-            },
-        })
-        .then((res) => {
-          this.currentUser = res.data[0];
-        })
-        .catch(function (error) {
-          if (error.res && error.res.status === 403) {
-            router.push("/");
-          }
-        });
+      })
+      .then((res) => {
+        this.currentUser = res.data[0];
+      })
+      .catch(function (error) {
+        if (error.res && error.res.status === 403) {
+          router.push("/");
+        }
+      });
     },
     getPost() {
-        axios.post("http://localhost:3000/api/post/byAuthor",{
-           id: this.userIdPage 
+      axios.post("http://localhost:3000/api/post/byAuthor",{
+        id: this.userIdPage 
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
         },
-        {
-            headers: {
-                Authorization: `Bearer ${this.token}`,
-            },
+      })
+      .then((res) => {
+        this.posts = res.data;
+        this.first = this.posts[0];
+        axios.get("http://localhost:3000/api/comment", {
+          headers: { Authorization: `Bearer ${this.token}` },
         })
-        .then((res) => {
-            this.posts = res.data;
-            this.first = this.posts[0];
-            axios.get("http://localhost:3000/api/comment", {
-              headers: { Authorization: `Bearer ${this.token}` },
-            })
-            .then((res) => (this.comments = res.data))
-            .catch(function (error) {
-              if (error.res && error.res.status === 401) {
-                router.push("/");
-              }
-            });
-        })
+        .then((res) => (this.comments = res.data))
         .catch(function (error) {
           if (error.res && error.res.status === 401) {
             router.push("/");
           }
         });
+      })
+      .catch(function (error) {
+        if (error.res && error.res.status === 401) {
+          router.push("/");
+        }
+      });
     },
   },
   mounted() {
     (this.userId = document.cookie
-      ? CryptoJS.AES.decrypt(
-          document.cookie.split("; ").find((row) => row.startsWith("userId=")).split("=")[1],store.state.CryptoKey
+      ? CryptoJS.AES.decrypt(document.cookie.split("; ").find((row) => row.startsWith("userId=")).split("=")[1],store.state.CryptoKey
         ).toString(CryptoJS.enc.Utf8)
       : null),
       (this.token = document.cookie
         ? document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1]
-        : null);
-    
+      : null);
     this.getUser();
     axios.post("http://localhost:3000/api/user",{ 
-        userId: this.userId 
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-        .then((res) => (this.user = res.data[0]))
-        .catch(function (error) {
-            if (error.res && error.res.status === 400) {
-                document.cookie = "userId=";
-                document.cookie = "user-token=";
-                router.push("/");
-            }
-        });
+      userId: this.userId 
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+    .then((res) => (this.user = res.data[0]))
+    .catch(function (error) {
+      if (error.res && error.res.status === 400) {
+        document.cookie = "userId=";
+        document.cookie = "user-token=";
+        router.push("/");
+      }
+    });
     this.getPost();
     this.liked();
   },

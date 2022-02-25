@@ -52,11 +52,11 @@ export default {
       user: null,
       token: document.cookie
         ? document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1]
-        : null,
+      : null,
       userId: document.cookie
         ? CryptoJS.AES.decrypt(document.cookie.split("; ").find((row) => row.startsWith("userId=")).split("=")[1],
-            store.state.CryptoKey).toString(CryptoJS.enc.Utf8)
-        : null,
+          store.state.CryptoKey).toString(CryptoJS.enc.Utf8)
+      : null,
     };
   },
   methods: {
@@ -68,25 +68,24 @@ export default {
       document.cookie = "userId=";
       document.cookie = "user-token=";
       router.go();
-      
     },
 
     getCurrentUser() {
       
       axios.post("http://localhost:3000/api/user",{ userId: this.userId },
-          { headers: {
-              Authorization: `Bearer ${this.token}`,
-            },
-          }
-        )
-        .then((response) => (this.user = response.data[0]))
-        .catch(function (error) {
-          if (error.response && error.response.status === 400) {
-            document.cookie = "userId=";
-            document.cookie = "user-token=";
-            router.push("/");
-          }
-        });
+      { 
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      })
+      .then((res) => (this.user = res.data[0]))
+      .catch(function (error) {
+        if (error.res && error.res.status === 400) {
+          document.cookie = "userId=";
+          document.cookie = "user-token=";
+          router.push("/");
+        }
+      });
     },
   },
   mounted() {

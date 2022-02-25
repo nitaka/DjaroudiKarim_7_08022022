@@ -157,40 +157,42 @@ export default {
       this.image = event.target.files[0];
     },
     addPost() {
-      this.token = document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1];
-      this.text = document.querySelector("#text").value;
+      const self = this;
+      self.token = document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1];
+      self.text = document.querySelector("#text").value;
       const fd = new FormData();
-      fd.append("userId", this.userId);
-      if (this.text != "") {
-        fd.append("text", this.text);
+      fd.append("userId", self.userId);
+      if (self.text != "") {
+        fd.append("text", self.text);
       }
-      if (this.image) {
-        fd.append("image", this.image, "image");
+      if (self.image) {
+        fd.append("image", self.image, "image");
       }
-      if (this.text || this.image) {
+      if (self.text || self.image) {
         axios.post("http://localhost:3000/api/post", fd, {
             headers: {
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${this.token}`,
+                Authorization: `Bearer ${self.token}`,
             },
           })
-          .then(function (response) {
-            console.log(response);
+          .then(function (res) {
+            console.log(res);
             document.querySelector("#text").value = null;
-            this.getPost();
+            self.getPost();
           })
           .catch(error => console.log(error));
       }
     },
     liked() {
+      const self = this;
       axios.post("http://localhost:3000/api/like/liked", {
-          userId: this.userId,
+          userId: self.userId,
         })
-        .then(function (res) {
+        .then(function(res) {
           const ObjlikedPosts = res.data;
-          this.likedPost = [];
+          self.likedPost = [];
           for (const ObjlikedPost of ObjlikedPosts) {
-            this.likedPost.push(ObjlikedPost.postId);
+            self.likedPost.push(ObjlikedPost.postId);
           }
         })
         .catch(error => console.log(error));
@@ -209,14 +211,16 @@ export default {
       }
     },
     like(currentPostId) {
+      const self = this;
+      // identifie par id
       axios.post("http://localhost:3000/api/like", {
-        userId: this.userId,
+        userId: self.userId,
         postId: currentPostId,
       })
       .then(function (res) {
         console.log(res);
-        this.liked();
-        this.getPost();
+        self.liked();
+        self.getPost();
       })
       .catch(error => console.log(error));
     },
@@ -226,8 +230,8 @@ export default {
           headers: { Authorization: `Bearer ${this.token}` },
           data: { userId: this.userId, admin: this.user.admin },
         })
-        .then((response) => {
-          console.log(response);
+        .then((res) => {
+          console.log(res);
           this.getPost();
         })
         .catch(error => console.log(error));
@@ -237,17 +241,18 @@ export default {
       this.newComment = event.target.value;
     },
     comment(event, id) {
-      if (this.newComment) {
+      const self = this;
+      if (self.newComment) {
         axios.post("http://localhost:3000/api/comment",{
-          comment: this.newComment,
-          authorId: this.userId,
+          comment: self.newComment,
+          authorId: self.userId,
           postId: id,
         },
         {
-          headers: { Authorization: `Bearer ${this.token}` },
+          headers: { Authorization: `Bearer ${self.token}` },
         })
-        .then(function (response) {
-          console.log(response);
+        .then(function (res) {
+          console.log(res);
           let pathClass, pathInput;
           if (event.path[2].children[3].matches(".react")) {
               pathClass = event.path[2].children[4];
@@ -258,7 +263,7 @@ export default {
           }
           pathClass.classList.remove("disp");
           pathInput.value = null;
-          this.getPost();
+          self.getPost();
         })
         .catch(error => console.log(error));
       }
@@ -270,15 +275,15 @@ export default {
         axios.get("http://localhost:3000/api/post", {
           headers: { Authorization: `Bearer ${this.token}` },
         })
-        .then((response) => {
-          this.postsRecive = response.data;
+        .then((res) => {
+          this.postsRecive = res.data;
           this.first = this.postsRecive[0];
           if (this.posts != this.postsRecive) {
               this.posts = this.postsRecive;
           }
         })
         .catch(function (error) {
-          if (error.response && error.response.status === 401) {
+          if (error.res && error.res.status === 401) {
               router.push("/");
           }
         });
@@ -303,7 +308,7 @@ export default {
         ? document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1]
     : null);
     axios.post("http://localhost:3000/api/user",{ 
-        userId: this.userId 
+        userId: this.userId
     },
     {
       headers: {

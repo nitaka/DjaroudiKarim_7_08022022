@@ -1,38 +1,38 @@
 <template>
   <div class="container">
       <div class="cont">
-          <form class="form sign-in" v-on:submit.prevent="login">
-              <h2>Se connecter</h2>
-              <label><span>Email</span><input v-model="login.email" type="email" id="LogEmail" name="email" placeholder="Ton email" required /></label>
-              <p id="errMail"></p>
-              <label><span>Mot de passe</span><input v-model="login.password" type="password" id="logPassword" name="password" placeholder="password" required /></label>
-              <p id="errPass"></p>
-              <button type="submit" class="submit" @click="sendLogin" >Connexion</button>
-          </form>
-          <div class="sub-cont">
-              <div class="img">
-                  <div class="img__text m--up">
-                      <h2>Nouveau sur le groupe</h2>
-                      <p>Créer un compte 😺 </p>
-                  </div>
-                  <div class="img__text m--in">
-                      <h2>Hello</h2>
-                      <p>Bienvenue sur le reseau de société Groupomania</p>
-                  </div>
-                  <div class="img__btn" @click="sendMessage">
-                      <span class="m--up newAccount">Nouveau compte</span>
-                      <span class="m--in">Login</span>
-                  </div>
+        <form class="form sign-in" v-on:submit.prevent="login">
+          <h2>Se connecter</h2>
+          <label><span>Email</span><input v-model="login.email" type="email" id="LogEmail" name="email" placeholder="Ton email" required /></label>
+          <p id="errMail"></p>
+          <label><span>Mot de passe</span><input v-model="login.password" type="password" id="logPassword" name="password" placeholder="password" required /></label>
+          <p id="errPass"></p>
+          <button type="submit" class="submit" @click="sendLogin" >Connexion</button>
+        </form>
+        <div class="sub-cont">
+          <div class="img">
+              <div class="img__text m--up">
+                <h2>Nouveau sur le groupe</h2>
+                <p>Créer un compte 😺 </p>
               </div>
-              <form class="form sign-up" v-on:submit.prevent="signup">
-                  <h2>Veuillez entrer les données ci-dessous</h2>
-                  <label><span>Nom</span><input v-model="signup.nom" type="text" id="nom" name="nom" placeholder="Nom de famille" required /></label>
-                  <label><span>Prénom</span><input v-model="signup.prenom" type="text" id="prenom" name="prenom" placeholder="Prénom" required /></label>
-                  <label><span>Email</span><input v-model="signup.email" type="email" id="email" name="email" placeholder="Email@gmail.com" required/></label>
-                  <label><span>Mot de passe</span><input v-model="signup.password" type="password" id="password" name="password" placeholder="Mot de passe" required /></label>
-                  <button type="submit" class="submit" @click="sendSignup">Validation</button>
-              </form>
+              <div class="img__text m--in">
+                <h2>Hello</h2>
+                <p>Bienvenue sur le reseau de société Groupomania</p>
+              </div>
+              <div class="img__btn" @click="sendMessage">
+                <span class="m--up newAccount">Nouveau compte</span>
+                <span class="m--in">Login</span>
+              </div>
           </div>
+          <form class="form sign-up" v-on:submit.prevent="signup">
+            <h2>Veuillez entrer les données ci-dessous</h2>
+            <label><span>Nom</span><input v-model="signup.nom" type="text" id="nom" name="nom" placeholder="Nom de famille" required /></label>
+            <label><span>Prénom</span><input v-model="signup.prenom" type="text" id="prenom" name="prenom" placeholder="Prénom" required /></label>
+            <label><span>Email</span><input v-model="signup.email" type="email" id="email" name="email" placeholder="Email@gmail.com" required/></label>
+            <label><span>Mot de passe</span><input v-model="signup.password" type="password" id="password" name="password" placeholder="Mot de passe" required /></label>
+            <button type="submit" class="submit" @click="sendSignup">Validation</button>
+          </form>
+        </div>
       </div>
   </div>
 </template>
@@ -88,13 +88,13 @@
             regexPassword.test(this.signup.password))) {
           axios.post("http://localhost:3000/api/user/signup", { nom: this.signup.nom, prenom: this.signup.prenom, email: this.signup.email, password: this.signup.password
           })
-            .then(response => {
-              console.log(response);
+            .then(res => {
+              console.log(res);
               axios.post("http://localhost:3000/api/user/login", { email: this.login.email, password: this.login.password,
               })
-              .then(function (response) {
-                const token = response.data.token;
-                const id = response.data.userId;
+              .then(function (res) {
+                const token = res.data.token;
+                const id = res.data.userId;
                 const userId = CryptoJS.AES.encrypt(id.toString(),store.state.CryptoKey).toString();
                 document.cookie = `user-token=${token}; SameSite=Lax; Secure; max-age=60*60;`;
                 document.cookie = `userId=${userId}; SameSite=Lax; Secure; max-age=60*60;`;
@@ -123,22 +123,22 @@
         this.login.email = document.querySelector("#LogEmail").value;
         this.login.password = document.querySelector("#logPassword").value;
 
-          if((this.login.email !== null || 
-              this.signup.password !== null) && 
-              (regexEmail.test(this.login.email) && 
-              regexPassword.test(this.login.password))) {
-            axios.post('http://localhost:3000/api/user/login', { email: this.login.email, password: this.login.password
-            }) 
-          .then(function (response) { 
-            const token = response.data.token;
-            const id = response.data.userId;
-            const userId = CryptoJS.AES.encrypt(id.toString(),store.state.CryptoKey).toString();
-            document.cookie = `user-token=${token}; SameSite=Lax; Secure; max-age=60*60;`;
-            document.cookie = `userId=${userId}; SameSite=Lax; Secure; max-age=60*60;`;
-            router.push("/home");
-            router.go();
-          })
-          .catch(error => console.log(error));
+        if((this.login.email !== null || 
+            this.signup.password !== null) && 
+            (regexEmail.test(this.login.email) && 
+            regexPassword.test(this.login.password))) {
+          axios.post('http://localhost:3000/api/user/login', { email: this.login.email, password: this.login.password
+        }) 
+        .then(function (res) { 
+          const token = res.data.token;
+          const id = res.data.userId;
+          const userId = CryptoJS.AES.encrypt(id.toString(),store.state.CryptoKey).toString();
+          document.cookie = `user-token=${token}; SameSite=Lax; Secure; max-age=60*60;`;
+          document.cookie = `userId=${userId}; SameSite=Lax; Secure; max-age=60*60;`;
+          router.push("/home");
+          router.go();
+        })
+        .catch(error => console.log(error));
         } else if (this.login.email === null || regexEmail.test(this.login.email) === false) {
             const errMail = document.querySelector("#errMail");
             errMail.innerText = "Veuillez renseigner un mail correct 😊";
