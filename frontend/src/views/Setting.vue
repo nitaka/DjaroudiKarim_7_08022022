@@ -16,7 +16,7 @@
     <div class="modifyBox" v-if="!deleteAccount">
       <div class="wrapper fadeInDown">
         <div id="formContent">
-          <h2 class="modif underlineHoverH2" v-if="modePassword" @click="switchTo()">Modifer ton profil</h2>
+          <h2 class="modif underlineHoverH2 fontColor" v-if="modePassword" @click="switchTo()">Modifer ton profil</h2>
           <h2 class="modif underlineHoverH2" v-if="!modePassword" @click="switchTo()">Modifer ton mot de passe</h2>
           <!-- Modif Form -->
           <form v-on:submit.prevent="modifier, changePassword">
@@ -243,7 +243,7 @@ h2 {
   text-transform: uppercase;
   display: inline-block;
   margin: 40px 8px 10px 8px;
-  color: #cccccc;
+  color: #000000;
 }
 
 /* STRUCTURE */
@@ -474,6 +474,8 @@ input[type="text"]:placeholder {
   content: "";
   transition: width 0.2s;
 }
+
+
 
 .underlineHover:hover {
   color: #0d0d0d;

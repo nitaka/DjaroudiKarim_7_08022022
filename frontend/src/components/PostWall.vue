@@ -7,10 +7,10 @@
                     <form v-on:submit.prevent>
                         <div class=" form-group mb-3 col-12 d-flex justify-content-center align-items-center">
                             <img v-if="user" v-bind:src="user.imgProfil" alt="photo post" class="imgProf" />
-                            <input type="text" class="form-control mb-2" id="text" aria-describedby="emailHelp" placeholder=" Quoi de neuf ?"/>
+                            <input type="text" aria-label="Inserez votre post" class="form-control mb-2" id="text" placeholder="insérez votre post"/>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <input @change="upload2" type="file" id="image" name="image" accept="image/png, image/jpeg"/>
+                            <label for="image">Inserer une image:</label><input @change="upload2" type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                             <button @click="addPost()" class="publier btn btn-primary">
                                 Publier
                             </button>
@@ -27,7 +27,7 @@
                         <div class=" d-flex flex-row justify-content-between align-items-center p-2 border-bottom infopost">
                             <div class="d-flex flex-row align-items-center px-2">
                                 <router-link :to="{ name: 'user', params: { userId: post.authorId } }">
-                                    <img class="rounded-circle imgProf" v-bind:src="post.imgProfil" width="45"/>
+                                    <img class="rounded-circle imgProf" alt="Image de ton profil" v-bind:src="post.imgProfil" width="45"/>
                                 </router-link>
                                 <div class="d-flex flex-column flex-wrap ml-2">
                                     <span class="font-weight-bold nomUser">
@@ -47,7 +47,7 @@
                     </div>
                     <div v-if="post.imageUrl" class="mb-2">
                         <!-- Image du post -->
-                        <img class="img-fluid img-responsive imagePost" v-bind:src="post.imageUrl"/>
+                        <img class="img-fluid img-responsive imagePost" alt="image du post" v-bind:src="post.imageUrl"/>
                     </div>
                     <div class="react">
                         <div class="like" @click="liked">
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <div class="col-10 d-flex justify-content-center comment">
-                        <input v-on:keyup.enter="comment($event, post.postId)" @change="upload" type="text" class="form-control mt-3 mb-3" id="comment" aria-describedby="comment" placeholder="Ajoutez un commentaire ..."/>
+                        <input aria-label="Ajoutez votre commentaire" v-on:keyup.enter="comment($event, post.postId)" @change="upload" type="text" class="form-control mt-3 mb-3" id="comment" aria-describedby="comment" placeholder="Ajoutez un commentaire ..."/>
                     </div>
                 </div>
             </div>

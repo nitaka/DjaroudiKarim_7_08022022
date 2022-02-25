@@ -24,7 +24,7 @@
               <div class=" d-flex flex-row justify-content-between align-items-center p-2 border-bottom infopost">
                 <div class="d-flex flex-row align-items-center px-2">
                   <router-link :to="{ name: 'user', params: { userId: post.authorId } }">
-                    <img class="rounded-circle imgProf" v-bind:src="post.imgProfil" width="45"/>
+                    <img class="rounded-circle imgProf" alt="Image du profil" v-bind:src="post.imgProfil" width="45"/>
                   </router-link>
                   <div class="d-flex flex-column flex-wrap ml-2">
                     <span class="font-weight-bold nomUser">
@@ -44,7 +44,7 @@
               </span>
             </div>
             <div v-if="post.imageUrl" class="mb-2">
-              <img class="img-fluid img-responsive imagePost" v-bind:src="post.imageUrl"/>
+              <img class="img-fluid img-responsive imagePost" alt="Image du post" v-bind:src="post.imageUrl"/>
             </div>
             <div class="react">
               <div class="like" @click="liked">
@@ -88,7 +88,7 @@
               </div>
             </div>
             <div class="col-10 d-flex justify-content-center comment">
-              <input v-on:keyup.enter="comment($event, post.postId)" @change="upload" type="text" class="form-control mt-3 mb-3" id="comment" aria-describedby="comment" placeholder="Ajoutez un commentaire ..."/>
+              <input v-on:keyup.enter="comment($event, post.postId)" @change="upload" type="text" aria-label="Ajoutez un commentaire" class="form-control mt-3 mb-3" id="comment" aria-describedby="comment" placeholder="Ajoutez un commentaire ..."/>
             </div>
           </div>
         </div>
