@@ -118,7 +118,7 @@ export default {
           ? document.querySelector("#oldPassword").value
       : null;
       this.token = document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1];
-      let validPassword = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/);
+      let validPassword = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$?%^&*.]).{8,}$/);
       if (validPassword.test(this.password)) {
         console.log(true);
         axios.put(`http://localhost:3000/api/user/modifPassword/${this.userId}`,{
