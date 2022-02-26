@@ -4,7 +4,7 @@
       <div class="wrapper fadeInDown">
         <div id="formContent">
           <h2 class="suppr" v-if="!modePassword">SUPPRIMER LE PROFIL</h2>
-          <!-- Modif Form -->
+          <!-- Modif Form supprime le compte -->
           <form v-on:submit.prevent="supprimerCompte()">
             <input type="text" id="password" name="login" placeholder="Mot de passe" required/>
             <div class="alert alert-danger app" role="alert" v-if="errorMdp">Mot de passe incorrect !</div>
@@ -18,20 +18,21 @@
         <div id="formContent">
           <h2 class="modif underlineHoverH2 fontColor" v-if="modePassword" @click="switchTo()">Modifer ton profil</h2>
           <h2 class="modif underlineHoverH2" v-if="!modePassword" @click="switchTo()">Modifer ton mot de passe</h2>
-          <!-- Modif Form -->
+          <!-- Modif Form Change nom prénom + poste(metier)-->
           <form v-on:submit.prevent="modifier, changePassword">
-            <input type="text" id="nom" name="nom" placeholder="Ton nom" v-if="!modePassword"/>
-            <input v-if="!modePassword" type="text" id="prenom" name="prenom" placeholder="Ton prenom"/>
-            <input v-if="!modePassword" type="text" id="desc" name="desc" placeholder="Poste chez Groupomania"/>
+            <input aria-label="Changer ton nom" type="text" id="nom" name="nom" placeholder="Ton nom" v-if="!modePassword"/>
+            <input aria-label="Changer ton prénom" v-if="!modePassword" type="text" id="prenom" name="prenom" placeholder="Ton prenom"/>
+            <input aria-label="Ajoute ton métier" v-if="!modePassword" type="text" id="desc" name="desc" placeholder="Poste chez Groupomania"/>
             <p class="red app" v-if="long && !modePassword">Les champs doivent faire au moins 3 caractères.</p>
-            <input v-if="modePassword" type="password" id="oldPassword" name="login" placeholder="Ancien mot de passe" required/>
-            <input v-if="modePassword" type="password" id="password" name="login" placeholder="Nouveau mot de passe" required/>
+           <!-- Modif Form Change mot de passe-->
+            <input aria-label="Ancien mot de passe" v-if="modePassword" type="password" id="oldPassword" name="login" placeholder="Ancien mot de passe" required/>
+            <input aria-label="Nouveau mot de passe" v-if="modePassword" type="password" id="password" name="login" placeholder="Nouveau mot de passe" required/>
             <p class="red" v-if="errorNewMdp && modePassword">
               Ton mot de passe doit contenir 8 caractères, une majuscule, une
               minuscule et un caractère spécial
             </p>
-            <input v-if="!modePassword" @click="modifier()" type="submit" value="MODIFIER"/>
-            <input v-if="modePassword" @click="changePassword()" type="submit" value="CHANGER MOT DE PASSE"/>
+            <input class="buttonSub" v-if="!modePassword" @click="modifier()" type="submit" value="MODIFIER"/>
+            <input class="buttonSub" v-if="modePassword" @click="changePassword()" type="submit" value="CHANGER MOT DE PASSE"/>
             <div class="alert alert-success app" role="alert" v-if="update">Utilisateur mis à jour !</div>
             <div class="alert alert-danger app" role="alert" v-if="errorMdp">Mot de passe incorrect !</div>
           </form>
@@ -203,9 +204,14 @@ export default {
   margin: 0px;
 }
 .underlineHover {
-  color: red;
+  color: rgb(70, 23, 23);
   cursor: pointer;
 }
+.buttonSub {
+  font-weight: bold;
+  background-color: #005C8A !important;
+}
+
 #image {
   margin: 20px;
 }

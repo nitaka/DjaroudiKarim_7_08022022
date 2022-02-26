@@ -356,6 +356,9 @@ export default {
     });
     this.getPost();
     this.liked();
+    if (!this.userId) {
+      router.push("/");
+    }
   },
 };
 </script>
