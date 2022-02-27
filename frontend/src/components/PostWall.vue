@@ -10,7 +10,7 @@
                             <input type="text" aria-label="Inserez votre post" class="form-control mb-2" id="text" placeholder="insérez votre post"/>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <label for="image">Inserer une image:</label><input @change="upload2" type="file" id="image" name="image" accept="image/png, image/jpeg"/>
+                           <input aria-label="Inserer une image" type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                             <button @click="addPost()" class="publier btn btn-primary">
                                 Publier
                             </button>
@@ -547,5 +547,12 @@ export default {
   .newPost {
     width: 100%;
   }
+}
+
+.form{
+  display: flexbox;
+  flex-wrap: wrap;
+  flex-direction: column !important;
+  width: 70%;
 }
 </style>

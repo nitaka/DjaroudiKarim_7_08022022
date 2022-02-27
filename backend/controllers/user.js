@@ -139,13 +139,6 @@ exports.modifAccount = (req, res, next) => {
             if (err) throw err;
         });
     }
-    if (req.body.desc != "") {
-
-        let sql2 = `UPDATE user SET user.desc=? WHERE id =?`;
-        pool.execute(sql2, [req.body.desc, req.params.id], function (err, result) {
-            if (err) throw err;
-        });
-    }
     if (req.body.prenom != "") {
         let sql2 = `UPDATE user SET prenom= ? WHERE id = ?;`;
         pool.execute(sql2, [req.body.prenom, req.params.id], function (err, result) {

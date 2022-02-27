@@ -1,46 +1,32 @@
 <template>
   <div class="container">
-    <div class="delete" v-if="deleteAccount">
-      <div class="wrapper fadeInDown">
-        <div id="formContent">
-          <h2 class="suppr" v-if="!modePassword">SUPPRIMER LE PROFIL</h2>
-          <!-- Modif Form supprime le compte -->
-          <form v-on:submit.prevent="supprimerCompte()">
-            <input type="text" id="password" name="login" placeholder="Mot de passe" required/>
-            <div class="alert alert-danger app" role="alert" v-if="errorMdp">Mot de passe incorrect !</div>
-            <button class="btn btn-danger mt-3 mb-5" @click="supprimerCompte()">SUPPRIMER</button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="modifyBox" v-if="!deleteAccount">
-      <div class="wrapper fadeInDown">
-        <div id="formContent">
-          <h2 class="modif underlineHoverH2 fontColor" v-if="modePassword" @click="switchTo()">Modifer ton profil</h2>
-          <h2 class="modif underlineHoverH2" v-if="!modePassword" @click="switchTo()">Modifer ton mot de passe</h2>
-          <!-- Modif Form Change nom prénom + poste(metier)-->
-          <form v-on:submit.prevent="modifier, changePassword">
-            <input aria-label="Changer ton nom" type="text" id="nom" name="nom" placeholder="Ton nom" v-if="!modePassword"/>
-            <input aria-label="Changer ton prénom" v-if="!modePassword" type="text" id="prenom" name="prenom" placeholder="Ton prenom"/>
-            <input aria-label="Ajoute ton métier" v-if="!modePassword" type="text" id="desc" name="desc" placeholder="Poste chez Groupomania"/>
-            <p class="red app" v-if="long && !modePassword">Les champs doivent faire au moins 3 caractères.</p>
-           <!-- Modif Form Change mot de passe-->
-            <input aria-label="Ancien mot de passe" v-if="modePassword" type="password" id="oldPassword" name="login" placeholder="Ancien mot de passe" required/>
-            <input aria-label="Nouveau mot de passe" v-if="modePassword" type="password" id="password" name="login" placeholder="Nouveau mot de passe" required/>
-            <p class="red" v-if="errorNewMdp && modePassword">
-              Ton mot de passe doit contenir 8 caractères, une majuscule, une
-              minuscule et un caractère spécial
-            </p>
-            <input class="buttonSub" v-if="!modePassword" @click="modifier()" type="submit" value="MODIFIER"/>
-            <input class="buttonSub" v-if="modePassword" @click="changePassword()" type="submit" value="CHANGER MOT DE PASSE"/>
-            <div class="alert alert-success app" role="alert" v-if="update">Utilisateur mis à jour !</div>
-            <div class="alert alert-danger app" role="alert" v-if="errorMdp">Mot de passe incorrect !</div>
-          </form>
-          <div id="formFooter">
-            <p @click="switchToDelete()" class="underlineHover" href="#">SUPPRIMER LE COMPTE</p>
-          </div>
-        </div>
-      </div>
+    <h2 class="modif underlineHoverH2 fontColor" v-if="modePassword" @click="switchTo()">Modifer ton profil</h2>
+    <h2 class="modif underlineHoverH2" v-if="!modePassword" @click="switchTo()">Modifer ton mot de passe</h2>
+    <!-- Modif Form Change nom prénom + poste(metier)-->
+    <form v-on:submit.prevent="modifier, changePassword">
+      <input aria-label="Changer ton nom" type="text" id="nom" name="nom" placeholder="Ton nom" v-if="!modePassword"/>
+      <input aria-label="Changer ton prénom" v-if="!modePassword" type="text" id="prenom" name="prenom" placeholder="Ton prenom"/>
+      <p class="red app" v-if="long && !modePassword">Les champs doivent faire au moins 3 caractères.</p>
+      <!-- Modif Form Change mot de passe-->
+      <input aria-label="Ancien mot de passe" v-if="modePassword" type="password" id="oldPassword" name="login" placeholder="Ancien mot de passe" required/>
+      <input aria-label="Nouveau mot de passe" v-if="modePassword" type="password" id="password" name="login" placeholder="Nouveau mot de passe" required/>
+      <p class="red" v-if="errorNewMdp && modePassword">
+        Ton mot de passe doit contenir 8 caractères, une majuscule, une
+        minuscule et un caractère spécial
+      </p>
+      <input class="buttonSub" v-if="!modePassword" @click="modifier()" type="submit" value="MODIFIER"/>
+      <input class="buttonSub" v-if="modePassword" @click="changePassword()" type="submit" value="CHANGER MOT DE PASSE"/>
+      <div class="alert alert-success app" role="alert" v-if="update">Utilisateur mis à jour !</div>
+      <div class="alert alert-danger app" role="alert" v-if="errorMdp">Mot de passe incorrect !</div>
+    </form>
+    <div>
+      <h2 class="suppr">SUPPRIMER LE PROFIL</h2>
+      <!-- Modif Form supprime le compte -->
+      <form v-on:submit.prevent="supprimerCompte()">
+        <input type="text" id="password" name="login" placeholder="Mot de passe" required/>
+        <div class="alert alert-danger app" role="alert" v-if="errorMdp">Mot de passe incorrect !</div><br/>
+        <button class="btn btn-danger mt-3 mb-5" @click="supprimerCompte()">SUPPRIMER</button>
+      </form>
     </div>
   </div>
 </template>
@@ -63,7 +49,6 @@ export default {
       nom: null,
       prenom: null,
       password: null,
-      desc: null,
       image: null,
       errorMdp: false,
       userId: document.cookie
@@ -97,10 +82,6 @@ export default {
         this.errorMdp = true;
         console.log(error);
       });
-    },
-    switchToDelete() {
-      this.deleteAccount = true;
-      this.modePassword = false;
     },
     switchTo() {
       this.modePassword
@@ -139,6 +120,7 @@ export default {
           this.errorMdp = true;
           this.update = false;
         });
+        alert("Mise à jour du mot de passe")
       } else {
         console.log(false);
         this.errorNewMdp = true;
@@ -152,20 +134,14 @@ export default {
       this.prenom = document.querySelector("#prenom")
         ? document.querySelector("#prenom").value
         : null;
-      this.desc = document.querySelector("#desc")
-        ? document.querySelector("#desc").value
-        : null;
       this.token = document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1];
       let validName = new RegExp(
         /^[a-zA-Z]+[a-zA-Z]+[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*){3,}$/
       );
-      if ( validName.test(this.nom) ||
-        validName.test(this.prenom) ||
-        validName.test(this.desc)) {
+      if ( validName.test(this.nom) || validName.test(this.prenom)) {
         axios.put(`http://localhost:3000/api/user/modifAccount/${this.userId}`,{
           prenom: this.prenom,
           nom: this.nom,
-          desc: this.desc,
         },
         {
           headers: {
@@ -177,6 +153,7 @@ export default {
           this.update = true;
         })
         .catch(error => console.log(error));
+        alert(`Félicitation ${this.nom} ${this.prenom} `);
       } else {
         this.long = true;
       }
@@ -196,6 +173,11 @@ export default {
     opacity: 0;
   }
 }
+
+.btn {
+  margin-left: 25px;
+}
+
 .app {
   animation: disparition 3.5s forwards;
 }
@@ -511,5 +493,30 @@ input[type="text"]:placeholder {
 }
 .suppr {
   color: rgb(197, 38, 38);
+}
+
+@media (max-width: 560px) {
+  .container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      input {
+        margin-left: 7%;
+      }
+    }
+  }
+  .btn {
+    max-width: 350px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .suppr {
+  color: rgb(197, 38, 38);
+  width: 100%;
+}
 }
 </style>

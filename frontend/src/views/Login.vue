@@ -25,7 +25,7 @@
               </div>
           </div>
           <form class="form sign-up" v-on:submit.prevent="signup">
-            <h2>Veuillez entrer les données ci-dessous</h2>
+            <h2 class="title-sign">Nouveau compte</h2>
             <label><span>Nom</span><input v-model="signup.nom" type="text" id="nom" name="nom" placeholder="Nom de famille" required /></label>
             <label><span>Prénom</span><input v-model="signup.prenom" type="text" id="prenom" name="prenom" placeholder="Prénom" required /></label>
             <label><span>Email</span><input v-model="signup.email" type="email" id="email" name="email" placeholder="Email@gmail.com" required/></label>
@@ -475,5 +475,60 @@ input {
     left: auto;
     right: 5px;
   }
+}
+@media (max-width: 990px) {
+
+  .cont,.form,.sub-cont  {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+ 
+  .sub-cont{
+    overflow: visible;
+    transition: none;
+    @include signUpActive {
+      transform: none;
+    }
+  }
+
+  .sign-up {
+    width: 700px;
+  }
+  
+  .img {
+    display: none;
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  .cont,.form,.sub-cont  {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+ 
+  .sub-cont{
+    overflow: visible;
+    transition: none;
+    @include signUpActive {
+      transform: none;
+    }
+  }
+
+  .sign-up {
+    width: 370px;
+  }
+  
+  .img {
+    display: none;
+  }
+
 }
 </style>
