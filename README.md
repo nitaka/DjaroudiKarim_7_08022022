@@ -1,14 +1,17 @@
-PROJET 7 - OPENCLASSROOMS - Créez un réseau social d’entreprise
+PROJET 7 OCR
+
+Créez un réseau social d’entreprise
+
 
 INSTALLATION
 
 git clone https://github.com/nitaka/DjaroudiKarim_7_08022022.git
 
 MySQL:
-Dans le fichier groupomania/backend/.env ,mettre le mot de passe d'accès à votre base de donnée et votre nom d'utilisateur si besoin (root par défaut)
+Dans le fichier groupomania/backend/.env ,mettre le mot de passe d'accès à votre base de donnée et votre nom d'utilisateur si besoin
 
 DB_USER= phpmyadmin ou root
-DB_PASS=
+DB_PASS= tonMotDePasse
 
 Puis Importer le fichier groupomania.sql
 
@@ -24,7 +27,7 @@ Ouvrir un autre terminal dans le dossier frontend puis effectuer les lignes de c
 npm install
 npm run serve
 
-Voici les codes d'accès admin :
+Identifiant admin :
 
 Email : admin@admin.com
 Password : Admin2022?
