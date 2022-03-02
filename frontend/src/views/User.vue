@@ -14,7 +14,6 @@
         </div>
         <div class="text-user">
           <p class="userName">{{ currentUser.prenom }} {{ currentUser.nom }}</p>
-          <p v-if="currentUser.desc" class="metier"><strong>Métier :</strong> {{ currentUser.desc }}</p>
         </div>
       </div>
       <div v-if="first">
@@ -69,7 +68,7 @@
               <div class="comments" v-for="comment in comments" :key="comment.idComment">
                 <div class="imgProf" v-if="post.postId === comment.postId">
                   <router-link :to="{ name: 'user', params: { userId: comment.authorId } }">
-                    <img class="rounded-circle imgProf2" v-bind:src="comment.imgProf" alt="" srcset=""/>
+                    <img class="rounded-circle imgProf2" v-bind:src="comment.imgProfil" alt="" srcset=""/>
                   </router-link>
                 </div>
                 <div v-if="post.postId === comment.postId" class="commentaire">
@@ -202,14 +201,15 @@ export default {
       }
     },
     liked() {
+      const self = this;
       axios.post("http://localhost:3000/api/like/liked", {
         userId: this.userId,
       })
       .then(function (res) {
         const ObjlikedPosts = res.data;
-        this.likedPost = [];
+        self.likedPost = [];
         for (const ObjlikedPost of ObjlikedPosts) {
-          this.likedPost.push(ObjlikedPost.postId);
+          self.likedPost.push(ObjlikedPost.postId);
         }
       })
       .catch(error => console.log(error));
@@ -228,14 +228,15 @@ export default {
       }
     },
     like(currentPostId) {
+      const self = this;
       axios.post("http://localhost:3000/api/like", {
-        userId: this.userId,
+        userId: self.userId,
         postId: currentPostId,
       })
       .then(function (res) {
         console.log(res);
-        this.liked();
-        this.getPost();
+        self.liked();
+        self.getPost();
       })
       .catch(error => console.log(error));
     },

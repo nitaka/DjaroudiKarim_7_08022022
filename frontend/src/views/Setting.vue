@@ -23,7 +23,7 @@
       <h2 class="suppr">SUPPRIMER LE PROFIL</h2>
       <!-- Modif Form supprime le compte -->
       <form v-on:submit.prevent="supprimerCompte()">
-        <input type="text" id="password" name="login" placeholder="Mot de passe" required/>
+        <input aria-label="Entrer mot de passe pour supprimer votre compte" type="text" id="password" name="login" placeholder="Mot de passe" required/>
         <div class="alert alert-danger app" role="alert" v-if="errorMdp">Mot de passe incorrect !</div><br/>
         <button class="btn btn-danger mt-3 mb-5" @click="supprimerCompte()">SUPPRIMER</button>
       </form>

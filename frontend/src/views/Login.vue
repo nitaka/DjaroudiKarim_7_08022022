@@ -152,7 +152,7 @@
     mounted() { 
       if (document.cookie) {
         const userIdCookie = document.cookie.split("; ").find((row) => row.startsWith("userId=")).split("=")[1];
-        console.log(userIdCookie);
+        
         
         if (userIdCookie) {  // Si il y a un userId bascule sur le home
           router.push("/home");

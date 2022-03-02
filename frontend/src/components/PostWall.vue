@@ -10,10 +10,8 @@
                             <input type="text" aria-label="Inserez votre post" class="form-control mb-2" id="text" placeholder="insérez votre post"/>
                         </div>
                         <div class="d-flex justify-content-between">
-                           <input aria-label="Inserer une image" type="file" id="image" name="image" accept="image/png, image/jpeg"/>
-                            <button @click="addPost()" class="publier btn btn-primary">
-                                Publier
-                            </button>
+                           <input aria-label="Inserer une image" @change="upload2" type="file" id="image" name="image" accept="image/png, image/jpeg"/>
+                            <button @click="addPost()" class="publier btn btn-primary">Publier</button>
                         </div>
                     </form>
                 </div>
@@ -157,7 +155,7 @@ export default {
       this.image = event.target.files[0];
     },
     addPost() {
-      const self = this;
+        const self = this;
       self.token = document.cookie.split("; ").find((row) => row.startsWith("user-token=")).split("=")[1];
       self.text = document.querySelector("#text").value;
       const fd = new FormData();
