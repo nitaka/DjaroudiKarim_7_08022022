@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     <div v-if="post.text != ' '">
-                        <span class="text">{{ post.text }}</span>
+                        <span class="text">{{ post.text }} </span>
                     </div>
                     <div v-if="post.imageUrl" class="mb-2">
                         <!-- Image du post -->
@@ -71,26 +71,29 @@
                     <div class="block-com disp">
                       <!-- Infos commentaires -->
                         <div class="comments" v-for="comment in comments" :key="comment.idComment">
-                            <div class="imgProf" v-if="post.postId === comment.postId">
-                                <router-link :to="{ name: 'user', params: { userId: comment.authorId } }">
-                                    <img class="rounded-circle img2" v-bind:src="comment.imgProfil" alt="Photo post comment" srcset=""/>
-                                </router-link>
-                            </div>
-                            <div v-if="post.postId === comment.postId" class="commentaire">
-                                <span class="commentAuthor">
-                                    {{ comment.prenom }} {{ comment.nom }}
-                                </span>
-                                <p class="commentText">{{ comment.comment }}</p>
-                                <img class="delete" src="../assets/trash-can-solid.svg" alt="supprimer" v-if="comment.id == userId || (user && user.admin)" @click="
-                                    deleteComment(
-                                    comment.idComment,
-                                    comment.authorId,
-                                    post.postId
-                                    )
-                                "
-                                />
-                            </div>
-                        </div>
+                          <div class="imgProf" v-if="post.postId === comment.postId">
+                              <router-link :to="{ name: 'user', params: { userId: comment.authorId } }">
+                                  <img class="rounded-circle img2" v-bind:src="comment.imgProfil" alt="Photo post comment" />
+                              </router-link>
+                          </div>
+                          <div v-if="post.postId === comment.postId" class="commentaire">
+                              <span class="commentAuthor">
+                                  {{ comment.prenom }} {{ comment.nom }}
+                              </span>
+                              <span class="comDate"> 
+                                {{ formatDate2(post.date) }}
+                              </span>
+                              <p class="commentText">{{ comment.comment }} </p>
+                              <img class="delete" src="../assets/trash-can-solid.svg" alt="supprimer" v-if="comment.id == userId || (user && user.admin)" @click="
+                                  deleteComment(
+                                  comment.idComment,
+                                  comment.authorId,
+                                  post.postId
+                                  )
+                              "
+                              />
+                          </div>
+                      </div>
                     </div>
                     <div class="col-10 d-flex justify-content-center comment">
                         <input aria-label="Ajoutez votre commentaire" v-on:keyup.enter="comment($event, post.postId)" @change="upload" type="text" class="form-control mt-3 mb-3" id="comment" aria-describedby="comment" placeholder="Ajoutez un commentaire ..."/>
@@ -137,6 +140,13 @@ export default {
         month = datePart[1],
         day = datePart[2];
       return day + "/" + month + "/" + year;
+    },
+    formatDate2(input) {
+      const datePart = input.match(/\d+/g),
+        year = datePart[0].substring(2), // get only two digits
+        month = datePart[1],
+        day = datePart[2];
+      return day + "." + month + "." + year;
     },
     afficherComment(event) {
       let path;
@@ -334,6 +344,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .text-noPost {
   text-align: center;
   font-weight: 500;
@@ -358,6 +369,11 @@ export default {
   margin-right: auto;
   color: #091f43;
 }
+
+.comDate {
+  display: none;
+}
+
 .imagePost {
   object-fit: cover;
   max-height: 500px;
@@ -413,6 +429,11 @@ export default {
   border-radius: 100%;
   object-fit: cover;
 }
+
+.border {
+  border-radius: 20px;
+}
+
 .publier {
   width: 100px;
 }
@@ -439,6 +460,15 @@ export default {
 .posts:hover {
   .deletePost {
     display: inline;
+  }
+  .comDate{
+    display: inline;
+    color: #6e7686;
+    font-weight: bold;
+    font-style: italic;
+    position: relative;
+    left: 30px;
+    bottom: 5px;
   }
 }
 .deletePost {
@@ -531,6 +561,7 @@ export default {
   padding-top: 10px;
   padding-left: 10px;
   padding-right: 20px;
+  width: 40%;
   &:hover {
     .delete {
       display: block;
@@ -544,6 +575,9 @@ export default {
   }
   .newPost {
     width: 100%;
+  }
+  .commentaire {
+    width: 75%;
   }
 }
 

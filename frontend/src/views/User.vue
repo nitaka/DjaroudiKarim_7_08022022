@@ -388,8 +388,8 @@ export default {
 .file {
   height: 35px;
   position: absolute;
-  left: 90px;
-  top: 75px;
+  right: 185px;
+  bottom: 155px;
   display: none;
 }
 .home {
@@ -397,16 +397,19 @@ export default {
 }
 .imgProfChange {
   object-fit: cover;
-  height: 200px;
-  width: 200px;
+  height: 150px;
+  width: 150px;
   border-radius: 50%;
   margin-right: 60px;
   cursor: pointer;
   position: relative;
+  bottom: 100px;
+  right: 70px;
   &:hover {
     filter: brightness(40%);
+    opacity: 0.9;
     ~ .file {
-      display: block;
+      display: inline;
     }
   }
 }
@@ -511,6 +514,10 @@ export default {
 #text {
   border-radius: 20px;
   background-color: #f0f2f5;
+}
+
+.border {
+  border-radius: 20px;
 }
 
 .nbr {
@@ -626,6 +633,10 @@ export default {
 @media only screen and (max-width: 600px) {
   .userName {
     font-size: 25px;
+  }
+  .imgProfChange {
+    left: 50px;
+    top: 10px;
   }
 }
 </style>
