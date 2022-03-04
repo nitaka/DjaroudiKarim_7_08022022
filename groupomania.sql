@@ -119,7 +119,6 @@ CREATE TABLE `user` (
   `email` varchar(45) NOT NULL,
   `password` varchar(250) NOT NULL,
   `imgProfil` varchar(500) DEFAULT NULL,
-  `desc` varchar(45) DEFAULT NULL,
   `admin` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
@@ -132,7 +131,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Admin','admin','admin@admin.com','$2b$10$B2ds3jdGRJ0UabR1CGBXc.PF.sC6GXru/ARU2B9LSwgBbgFulKaOi','http://localhost:3000/images/profil/image1645717383544.jpg','Admin de Groupomania',1),(5,'Djadja','Ayden','bebe@gmail.com','$2b$10$0UIBBmMwsxdKLEronRBJuOvvOWLm9x5RMkrtxPOo4evSLwHgXI4RO','http://localhost:3000/images/profil/image1645727138048.jpg','PDG',0),(6,'Djadja','Nita','nita@gmail.com','$2b$10$ZX9lqEJSVrbqU1vv1bdPcOyNntDfAQewHuANZtfLTCbAb.WN5E4bO','http://localhost:3000/images/profil/image1645726870112.jpg','Service info',0),(7,'Chat','MarieF','Marief@gmail.com','$2b$10$08WEif9IGs9o9NihnUQOCeuQXC9TLxMg/L26moAu07dVjBZhKzJUe','http://localhost:3000/images/profil/image1645726233519.jpg','Agent logistique',0),(9,'Noisette','Boby','bob@gmail.com','$2b$10$9PmdHNArVI9YBuDeXBbB5.SVEl3VdgvFi2oQtL3rSaNzxND1CZ64m','http://localhost:3000/images/profil/image1645806972879.jpg','DGSI',0);
+INSERT INTO `user` VALUES (1,'Admin','admin','admin@admin.com','$2b$10$B2ds3jdGRJ0UabR1CGBXc.PF.sC6GXru/ARU2B9LSwgBbgFulKaOi','http://localhost:3000/images/profil/image1645717383544.jpg',1),(5,'Djadja','Ayden','bebe@gmail.com','$2b$10$0UIBBmMwsxdKLEronRBJuOvvOWLm9x5RMkrtxPOo4evSLwHgXI4RO','http://localhost:3000/images/profil/image1645727138048.jpg',0),(6,'Djadja','Nita','nita@gmail.com','$2b$10$ZX9lqEJSVrbqU1vv1bdPcOyNntDfAQewHuANZtfLTCbAb.WN5E4bO','http://localhost:3000/images/profil/image1645726870112.jpg',0),(7,'Chat','MarieF','Marief@gmail.com','$2b$10$08WEif9IGs9o9NihnUQOCeuQXC9TLxMg/L26moAu07dVjBZhKzJUe','http://localhost:3000/images/profil/image1645726233519.jpg',0),(9,'Noisette','Boby','bob@gmail.com','$2b$10$9PmdHNArVI9YBuDeXBbB5.SVEl3VdgvFi2oQtL3rSaNzxND1CZ64m','http://localhost:3000/images/profil/image1645806972879.jpg',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,4 +148,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-26 13:19:47
+-- Dump completed on 2022-03-04 16:47:59
