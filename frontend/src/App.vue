@@ -13,7 +13,7 @@
             <li class="nav-item" v-if="user">
               <a class="nav-link">
                 <router-link :to="{ name: 'user', params: { userId: user.id } }">
-                  <img v-bind:src="user.imgProfil" alt="Image du profil" class="userImg" @click="refresh"/>
+                  <img v-bind:src="user.imgProfil"  alt="Image du profil" class="userImg" @click="refresh"/>
                 </router-link>
               </a>
             </li>
@@ -236,7 +236,7 @@ button {
     top: 0;
     width: $contW;
     height: 100%;
-    background-image: url('./assets/groupoLog.png');
+    background-image: url('./assets/avatar.png');
     background-size: cover;
     transition: transform $switchAT ease-in-out;
   }

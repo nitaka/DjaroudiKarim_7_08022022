@@ -53,7 +53,8 @@
           nom: "",
           prenom: "",
           email: "",
-          password: ""
+          password: "",
+          img: "../assets/avatar.png",
         },
         login: {
           email: "",
@@ -86,7 +87,7 @@
             regexName.test(this.signup.prenom) && 
             regexEmail.test(this.signup.email) && 
             regexPassword.test(this.signup.password))) {
-          axios.post("http://localhost:3000/api/user/signup", { nom: this.signup.nom, prenom: this.signup.prenom, email: this.signup.email, password: this.signup.password
+          axios.post("http://localhost:3000/api/user/signup", { nom: this.signup.nom, prenom: this.signup.prenom, email: this.signup.email, password: this.signup.password , img: this.signup.img
           })
             .then(res => {
               console.log(res);
